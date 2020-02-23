@@ -1,0 +1,9 @@
+*.bak
+vendor/*
+*.sublime-workspace
+.env
+.env.development
+.env.test
+docs/
+build/
+output/
