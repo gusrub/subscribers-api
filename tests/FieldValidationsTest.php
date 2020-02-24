@@ -22,7 +22,7 @@ class FieldValidationsTest extends BaseTestCase
         $this->field = new Field([
             "title" => "First Name",
             "dataType" => "string",
-            "subscriberId" => "subscriberId"
+            "subscriberId" => 1
         ]);
     }
 

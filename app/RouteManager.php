@@ -73,6 +73,28 @@ class RouteManager
     }
 
     /**
+     * Defines a PATCH route and a callback to be executed when said route is
+     * accesed. Route must be relative. Identifiers may be used for each
+     * resource in a colon fashion eg:
+     *
+     * resource/:id/child_resource/:child_id
+     *
+     * @param String $route The route path to define.
+     * @param callable $callback Callable code that will be executed when route
+     *  is accessed.
+     * @return null
+     */
+    public function patch($route, callable $callback)
+    {
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        if ($this->routeMatches($route, __FUNCTION__)) {
+            $routeInfo = $this->routeInfo($route);
+            call_user_func($callback, $routeInfo, $data);
+        }
+    }
+
+    /**
      * Defines a DELETE route and a callback to be executed when said route is
      * accesed. Route must be relative. Identifiers may be used for each
      * resource in a colon fashion eg:

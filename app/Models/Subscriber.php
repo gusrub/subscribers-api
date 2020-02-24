@@ -40,33 +40,6 @@ class Subscriber extends BaseModel
     public $campaignId;
 
     /**
-     * Overrides the status to set it to an internal integer
-     *
-     * @param String $property The property name that is being accessed.
-     * @return mixed The modified propery value
-     */
-    public function __get($property)
-    {
-        if ($property == 'status') {
-            return self::STATUSES[$this->status];
-        }
-    }
-
-    /**
-     * Overrides the status to set it to an internal integer
-     *
-     * @param String $property The property name that is being accessed.
-     * @param mixed $value The value that is being received to be set.
-     * @return null
-     */
-    public function __set($property, $value)
-    {
-        if ($property == 'status') {
-            $this->status = array_flip(self::STATUSES)[$value];
-        }
-    }
-
-    /**
      * Implements specific validations for a subscriber.
      *
      * @return boolean Whether the model data is valid or not.
@@ -112,5 +85,13 @@ class Subscriber extends BaseModel
     protected function allowedFields()
     {
         return ["email", "fullName", "status", "campaignId"];
+    }
+
+    /**
+     * Returns the table name that this model stores data into.
+     */
+    protected function getTableName()
+    {
+        return "subscribers";
     }
 }

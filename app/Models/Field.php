@@ -34,33 +34,6 @@ class Field extends BaseModel
     public $subscriberId;
 
     /**
-     * Overrides the data type to set it to an internal integer
-     *
-     * @param String $property The property name that is being accessed.
-     * @return mixed The modified propery value
-     */
-    public function __get($property)
-    {
-        if ($property == 'dataType') {
-            return self::DATA_TYPES[$this->dataType];
-        }
-    }
-
-    /**
-     * Overrides the data type to set it to an internal integer
-     *
-     * @param String $property The property name that is being accessed.
-     * @param mixed $value The value that is being received to be set.
-     * @return null
-     */
-    public function __set($property, $value)
-    {
-        if ($property == 'dataType') {
-            $this->dataType = array_flip(self::DATA_TYPES)[$value];
-        }
-    }
-
-    /**
      * Implements specific validations for a subscriber field.
      *
      * @return boolean Whether the model data is valid or not.
@@ -94,6 +67,14 @@ class Field extends BaseModel
      */
     protected function allowedFields()
     {
-        return ["title", "dataType", "subscriberId", "campaignId"];
+        return ["title", "dataType", "subscriberId"];
+    }
+
+    /**
+     * Returns the table name that this model stores data into.
+     */
+    protected function getTableName()
+    {
+        return "fields";
     }
 }

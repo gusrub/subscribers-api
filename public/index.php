@@ -4,6 +4,10 @@ namespace SubscribersApi;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+# load dotenv
+$dotenv = \Dotenv\Dotenv::createImmutable(__DIR__ . "/../");
+$dotenv->load();
+
 use SubscribersApi\Models\Subscriber;
 use SubscribersApi\Models\Field;
 
@@ -51,8 +55,7 @@ $routes->put('subscribers/:id', function($routeInfo, $data){
     $subscriber = Subscriber::load($routeInfo["id"]);
     if(empty($subscriber)) {
         Response::render(Response::NOT_FOUND, 404);
-    }
-    else if ($subscriber->save($data)) {
+    } else if ($subscriber->save($data)) {
         Response::render($subscriber, 200);
     } else {
         Response::render($subscriber->getErrors(), 400);
@@ -76,14 +79,15 @@ $routes->delete('subscribers/:id', function($routeInfo){
  */
 
 // Fields resource index [GET]
-$routes->get('subscribers/:id/fields', function(){
-    $fields = Field::list();
+$routes->get('subscribers/:subscriberId/fields', function($routeInfo){
+    $subscriberId = $routeInfo["subscriberId"];
+    $fields = Field::list(["subscriberId"=>$subscriberId]);
     Response::render($fields, 200);
 });
 
 // Fields resource retrieval [GET]
-$routes->get('subscribers/:id/fields/:fieldId', function(){
-    $field = Field::load($routeInfo["fieldId"]);
+$routes->get('subscribers/:subscriberId/fields/:id', function($routeInfo){
+    $field = Field::load($routeInfo["id"]);
     if (empty($field)) {
         Response::render(Response::NOT_FOUND, 404);
     } else {
@@ -92,7 +96,7 @@ $routes->get('subscribers/:id/fields/:fieldId', function(){
 });
 
 // Fields resource creation [POST]
-$routes->post('subscribers/:id/fields', function($routeInfo, $data){
+$routes->post('subscribers/:subscriberId/fields', function($routeInfo, $data){
     $field = new Field($data);
     if ($field->save()) {
         Response::render($field, 201);
@@ -102,8 +106,8 @@ $routes->post('subscribers/:id/fields', function($routeInfo, $data){
 });
 
 // Fields resource update [PUT]
-$routes->put('subscribers/:id/fields/:fieldId', function($routeInfo, $data){
-    $field = Field::load($routeInfo["fieldId"]);
+$routes->put('subscribers/:subscriberId/fields/:id', function($routeInfo, $data){
+    $field = Field::load($routeInfo["id"]);
     if(empty($field)) {
         Response::render(Response::NOT_FOUND, 404);
     }
@@ -115,8 +119,8 @@ $routes->put('subscribers/:id/fields/:fieldId', function($routeInfo, $data){
 });
 
 // Subscriber resource removal [PUT]
-$routes->delete('subscribers/:id/fields/:fieldId', function($routeInfo){
-    $field = Field::load($routeInfo["fieldId"]);
+$routes->delete('subscribers/:subscriberId/fields/:id', function($routeInfo){
+    $field = Field::load($routeInfo["id"]);
     if (empty($field)) {
         Response::render(Response::NOT_FOUND, 404);
     } else if ($field->delete()) {

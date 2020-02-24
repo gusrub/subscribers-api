@@ -8,15 +8,15 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- Schema subscribers_api
 -- -----------------------------------------------------
 -- Sample database for code excercise for subscribers API
-DROP SCHEMA IF EXISTS `subscribers_api` ;
+DROP SCHEMA IF EXISTS `subscribers_api_test` ;
 
 -- -----------------------------------------------------
 -- Schema subscribers_api
 --
 -- Sample database for code excercise for subscribers API
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `subscribers_api` ;
-USE `subscribers_api` ;
+CREATE SCHEMA IF NOT EXISTS `subscribers_api_test` ;
+USE `subscribers_api_test` ;
 
 -- -----------------------------------------------------
 -- Table `campaigns`
@@ -83,7 +83,7 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- Data for table `campaigns`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `subscribers_api`;
+USE `subscribers_api_test`;
 INSERT INTO `campaigns` (`id`, `title`) VALUES (DEFAULT, 'Test campaign');
 INSERT INTO `campaigns` (`id`, `title`) VALUES (DEFAULT, 'Another campaign');
 
@@ -94,7 +94,7 @@ COMMIT;
 -- Data for table `subscribers`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `subscribers_api`;
+USE `subscribers_api_test`;
 INSERT INTO `subscribers` (`id`, `email`, `fullName`, `status`, `campaignId`) VALUES (DEFAULT, 'john@example.com', 'John Doe', 'active', 1);
 INSERT INTO `subscribers` (`id`, `email`, `fullName`, `status`, `campaignId`) VALUES (DEFAULT, 'jane@example.com', 'Jane Doe', 'active', 1);
 INSERT INTO `subscribers` (`id`, `email`, `fullName`, `status`, `campaignId`) VALUES (DEFAULT, 'mark@example.com', 'Mark Doe', 'unsubscribed', 1);
@@ -108,7 +108,7 @@ COMMIT;
 -- Data for table `fields`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `subscribers_api`;
+USE `subscribers_api_test`;
 INSERT INTO `fields` (`id`, `title`, `dataType`, `subscriberId`) VALUES (DEFAULT, 'salutation', 'string', 1);
 INSERT INTO `fields` (`id`, `title`, `dataType`, `subscriberId`) VALUES (DEFAULT, 'reward_points', 'number', 1);
 INSERT INTO `fields` (`id`, `title`, `dataType`, `subscriberId`) VALUES (DEFAULT, 'member_since', 'date', 1);

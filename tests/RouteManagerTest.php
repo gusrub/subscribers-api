@@ -4,6 +4,9 @@ namespace Tests;
 
 use GuzzleHttp\Client;
 use SubscribersApi\RouteManager as RouteManager;
+use SubscribersApi\Models\Campaign as Campaign;
+use SubscribersApi\Models\Subscriber as Subscriber;
+use SubscribersApi\Models\Field as Field;
 
 /**
  * Contains routing tests for the SubscribersApi\RouterManager.
@@ -52,7 +55,9 @@ class RouteManagerTest extends BaseTestCase
      */
     public function subscribersIndex()
     {
-        $response = $this->httpClient->get('/subscribers/1');
+        $subscribers = $this->createSubscribers(5);
+
+        $response = $this->httpClient->get("/subscribers");
         $this->assertEquals(
             $response->getHeader('content-type')[0],
             'application/json; charset=utf-8'
@@ -68,7 +73,10 @@ class RouteManagerTest extends BaseTestCase
      */
     public function subscribersGet()
     {
-        $response = $this->httpClient->get('/subscribers/1');
+        $subscriber = $this->createSubscribers(1)[0];
+        $subscriberId = $subscriber->id;
+
+        $response = $this->httpClient->get("/subscribers/$subscriberId");
         $this->assertEquals(
             $response->getHeader('content-type')[0],
             'application/json; charset=utf-8'
@@ -100,7 +108,10 @@ class RouteManagerTest extends BaseTestCase
      */
     public function subscribersPut()
     {
-        $response = $this->httpClient->put('/subscribers/1');
+        $subscriber = $this->createSubscribers(1)[0];
+        $subscriberId = $subscriber->id;
+
+        $response = $this->httpClient->put("/subscribers/$subscriberId");
         $this->assertEquals($response->getHeader(
             'content-type')[0],
             'application/json; charset=utf-8'
@@ -116,7 +127,10 @@ class RouteManagerTest extends BaseTestCase
      */
     public function subscribersDelete()
     {
-        $response = $this->httpClient->delete('/subscribers/1');
+        $subscriber = $this->createSubscribers(1)[0];
+        $subscriberId = $subscriber->id;
+
+        $response = $this->httpClient->delete("/subscribers/$subscriberId");
         $this->assertNotEquals($response->getStatusCode(), "404");
     }
 
@@ -128,7 +142,11 @@ class RouteManagerTest extends BaseTestCase
      */
     public function fieldsIndex()
     {
-        $response = $this->httpClient->get('/subscribers/1/fields');
+        $subscriber = $this->createSubscribers(1)[0];
+        $subscriberId = $subscriber->id;
+        $fields = $this->createFields(5, $subscriberId);
+
+        $response = $this->httpClient->get("/subscribers/$subscriberId/fields");
         $this->assertEquals(
             $response->getHeader('content-type')[0],
             'application/json; charset=utf-8'
@@ -144,7 +162,15 @@ class RouteManagerTest extends BaseTestCase
      */
     public function fieldsGet()
     {
-        $response = $this->httpClient->get('/subscribers/1/fields/1');
+        $subscriber = $this->createSubscribers(1)[0];
+        $subscriberId = $subscriber->id;
+        $field = $this->createFields(1, $subscriberId)[0];
+        $fieldId = $field->id;
+
+        $response = $this->httpClient->get(
+            "subscribers/$subscriberId/fields/$fieldId"
+        );
+
         $this->assertEquals(
             $response->getHeader('content-type')[0],
             'application/json; charset=utf-8'
@@ -160,7 +186,10 @@ class RouteManagerTest extends BaseTestCase
      */
     public function fieldsPost()
     {
-        $response = $this->httpClient->post('/subscribers/1/fields');
+        $subscriber = $this->createSubscribers(1)[0];
+        $subscriberId = $subscriber->id;
+
+        $response = $this->httpClient->post("/subscribers/$subscriberId/fields");
         $this->assertEquals(
             $response->getHeader('content-type')[0],
             'application/json; charset=utf-8'
@@ -176,7 +205,14 @@ class RouteManagerTest extends BaseTestCase
      */
     public function fieldsPut()
     {
-        $response = $this->httpClient->put('/subscribers/1/fields/1');
+        $subscriber = $this->createSubscribers(1)[0];
+        $subscriberId = $subscriber->id;
+        $field = $this->createFields(1, $subscriberId)[0];
+        $fieldId = $field->id;
+
+        $response = $this->httpClient->put(
+            "/subscribers/$subscriberId/fields/$fieldId"
+        );
         $this->assertEquals($response->getHeader(
             'content-type')[0],
             'application/json; charset=utf-8'
@@ -192,7 +228,14 @@ class RouteManagerTest extends BaseTestCase
      */
     public function fieldsDelete()
     {
-        $response = $this->httpClient->delete('/subscribers/1/fields/1');
+        $subscriber = $this->createSubscribers(1)[0];
+        $subscriberId = $subscriber->id;
+        $field = $this->createFields(1, $subscriberId)[0];
+        $fieldId = $field->id;
+
+        $response = $this->httpClient->delete(
+            "/subscribers/$subscriberId/fields/$fieldId"
+        );
         $this->assertNotEquals($response->getStatusCode(), "404");
     }
 
