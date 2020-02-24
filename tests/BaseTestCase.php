@@ -5,8 +5,8 @@ namespace Tests;
 use PHPUnit\Framework\TestCase;
 
 /**
-* Generic functionality that all other tests could pontetially use.
-*/
+ * Generic functionality that all other tests could pontetially use.
+ */
 class BaseTestCase extends TestCase
 {
 

@@ -11,7 +11,7 @@
     },
     "autoload": {
       "psr-4": {
-        "Mailerlite\\": "app"
+        "SubscribersApi\\": "app"
       }
     },
     "autoload-dev": {

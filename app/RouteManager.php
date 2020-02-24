@@ -7,11 +7,6 @@ namespace SubscribersApi;
 */
 class RouteManager
 {
-    /**
-     * Defines the default content-type to be set in the response headers if
-     * none is given.
-     */
-    const DEFAULT_CONTENT_TYPE = "Content-type: application/json; charset=utf-8";
 
     /**
      * Defines a GET route and a callback to be executed when said route is
@@ -28,10 +23,8 @@ class RouteManager
     public function get($route, callable $callback)
     {
         if ($this->routeMatches($route, __FUNCTION__)) {
-            http_response_code(200);
-            header(self::DEFAULT_CONTENT_TYPE);
-            call_user_func($callback);
-            exit;
+            $routeInfo = $this->routeInfo($route);
+            call_user_func($callback, $routeInfo);
         }
     }
 
@@ -49,11 +42,11 @@ class RouteManager
      */
     public function post($route, callable $callback)
     {
+        $data = json_decode(file_get_contents('php://input'), true);
+
         if ($this->routeMatches($route, __FUNCTION__)) {
-            http_response_code(201);
-            header(self::DEFAULT_CONTENT_TYPE);
-            call_user_func($callback);
-            exit;
+            $routeInfo = $this->routeInfo($route);
+            call_user_func($callback, $routeInfo, $data);
         }
     }
 
@@ -71,11 +64,11 @@ class RouteManager
      */
     public function put($route, callable $callback)
     {
+        $data = json_decode(file_get_contents('php://input'), true);
+
         if ($this->routeMatches($route, __FUNCTION__)) {
-            http_response_code(200);
-            header(self::DEFAULT_CONTENT_TYPE);
-            call_user_func($callback);
-            exit;
+            $routeInfo = $this->routeInfo($route);
+            call_user_func($callback, $routeInfo, $data);
         }
     }
 
@@ -94,18 +87,16 @@ class RouteManager
     public function delete($route, callable $callback)
     {
         if ($this->routeMatches($route, __FUNCTION__)) {
-            http_response_code(204);
-            header(self::DEFAULT_CONTENT_TYPE);
-            call_user_func($callback);
-            exit;
+            $routeInfo = $this->routeInfo($route);
+            call_user_func($callback, $routeInfo);
         }
     }
 
     /**
      * Internal method to be used to check whether a given string matches the
-     * pattern for a predefined route. HTTP method/verb must also match as 
+     * pattern for a predefined route. HTTP method/verb must also match as
      * there's the case for similar paths but different actions eg:
-     * 
+     *
      * GET resource/
      * POST resource/
      *
@@ -151,28 +142,33 @@ class RouteManager
     }
 
     /**
-     * Constructs an array that maps resources and their identifiers.
-     * 
-     * @param String $route The route that these mappings should be build from.
+     * Constructs an array that maps resources and their identifiers from the
+     * $_SERVER global variable path info compared to the defined route.
+     *
+     * @param string $definedRoute The route definition that we want to compare.
      * @return Array An array containing mappings of resources and their ID's.
      */
-    private function routeInfo($route)
+    private function routeInfo($definedRoute)
     {
-        $route = explode("/", $route);
-        $resources = [];
-        $ids = [];
-        foreach ($route as $key => $value) {
-            if($key % 2 == 0) {
-                array_push($resources, $value);
-            } else {
-                array_push($ids, $value);
+        // remove trailing slashes
+        $requestRoute = ltrim(rtrim($_SERVER['PATH_INFO'], "/"), "/");
+        $definedRoute = ltrim(rtrim($definedRoute, "/"), "/");
+
+        // split parts
+        $requestRoute = explode("/", $requestRoute);
+        $definedRoute = explode("/", $definedRoute);
+
+        $routeInfo = [];
+
+        // parts count must match, otherwise there are no identifiers
+        if (count($requestRoute) === count($definedRoute)) {
+            for ($i=0; $i < count($requestRoute); $i++) {
+                if (substr($definedRoute[$i], 0, 1) === ":") {
+                    $routeInfo[str_replace(":", "", $definedRoute[$i])] = $requestRoute[$i];
+                }
             }
         }
 
-        if (count($ids) < count($resources)) {
-            array_push($ids, null);
-        }
-
-        return array_combine($resources, $ids);
+        return $routeInfo;
     }
 }

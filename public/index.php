@@ -1,15 +1,19 @@
 <?php
 
+namespace SubscribersApi;
+
 require __DIR__ . '/../vendor/autoload.php';
-require __DIR__ . '/../app/RouteManager.php';
+
+use SubscribersApi\Models\Subscriber;
+use SubscribersApi\Models\Field;
 
 // Load up the route manager that allows us to define endpoints and what should
 // happen when each of them is accessed
-$routes = new SubscribersApi\RouteManager();
+$routes = new RouteManager();
 
 // Root GET route, just some dummy response
-$routes->get('/', function(){
-    echo json_encode(["message"=>"this is an API"]);
+$routes->get('/', function($routeInfo){
+    Response::render(["message"=>"this is an API"], 200);
 });
 
 /**
@@ -17,28 +21,54 @@ $routes->get('/', function(){
  */
 
 // Subscribers resource index [GET]
-$routes->get('subscribers', function(){
-    echo json_encode(["Route matches" => "GET /subscribers"]);
+$routes->get('subscribers', function($routeInfo){
+    $subscribers = Subscriber::list();
+    Response::render($subscribers, 200);
 });
 
 // Subscribers resource retrieval [GET]
-$routes->get('subscribers/:id', function(){
-    echo json_encode(["Route matches" => "GET /subscribers/:id"]);
+$routes->get('subscribers/:id', function($routeInfo){
+    $subscriber = Subscriber::load($routeInfo["id"]);
+    if (empty($subscriber)) {
+        Response::render(Response::NOT_FOUND, 404);
+    } else {
+        Response::render($subscriber, 200);
+    }
 });
 
-// Subscriber resource creation [POST]
-$routes->post('subscribers', function(){
-    echo json_encode(["Route matches" => "POST /subscribers"]);
+// // Subscriber resource creation [POST]
+$routes->post('subscribers', function($routeInfo, $data){
+    $subscriber = new Subscriber($data);
+    if ($subscriber->save()) {
+        Response::render($subscriber, 201);
+    } else {
+        Response::render($subscriber->getErrors(), 400);
+    }
 });
 
 // Subscriber resource update [PUT]
-$routes->put('subscribers/:id', function(){
-    echo json_encode(["Route matches" => "PUT /subscribers/:id"]);
+$routes->put('subscribers/:id', function($routeInfo, $data){
+    $subscriber = Subscriber::load($routeInfo["id"]);
+    if(empty($subscriber)) {
+        Response::render(Response::NOT_FOUND, 404);
+    }
+    else if ($subscriber->save($data)) {
+        Response::render($subscriber, 200);
+    } else {
+        Response::render($subscriber->getErrors(), 400);
+    }
 });
 
-// Subscriber resource removal [PUT]
-$routes->delete('subscribers/:id', function(){
-    echo json_encode(["Route matches" => "DELETE /subscribers/:id"]);
+// Subscriber resource removal [DELETE]
+$routes->delete('subscribers/:id', function($routeInfo){
+    $subscriber = Subscriber::load($routeInfo["id"]);
+    if (empty($subscriber)) {
+        Response::render(Response::NOT_FOUND, 404);
+    } else if ($subscriber->delete()) {
+        Response::render(null, 204, false);
+    } else {
+        Response::render($subscriber->getErrors(), 400);
+    }
 });
 
 /**
@@ -46,30 +76,55 @@ $routes->delete('subscribers/:id', function(){
  */
 
 // Fields resource index [GET]
-$routes->get('/subscribers/:id/fields', function(){
-    echo json_encode(["Route matches" => "GET /subscribers/:id/fields"]);
+$routes->get('subscribers/:id/fields', function(){
+    $fields = Field::list();
+    Response::render($fields, 200);
 });
 
 // Fields resource retrieval [GET]
-$routes->get('subscribers/:id/fields/:field_id', function(){
-    echo json_encode(["Route matches" => "GET /subscribers/:id/fields/:field_id"]);
+$routes->get('subscribers/:id/fields/:fieldId', function(){
+    $field = Field::load($routeInfo["fieldId"]);
+    if (empty($field)) {
+        Response::render(Response::NOT_FOUND, 404);
+    } else {
+        Response::render($field, 200);
+    }
 });
 
 // Fields resource creation [POST]
-$routes->post('subscribers/:id/fields', function(){
-    echo json_encode(["Route matches" => "POST /subscribers/:id/fields"]);
+$routes->post('subscribers/:id/fields', function($routeInfo, $data){
+    $field = new Field($data);
+    if ($field->save()) {
+        Response::render($field, 201);
+    } else {
+        Response::render($field->getErrors(), 400);
+    }
 });
 
 // Fields resource update [PUT]
-$routes->put('subscribers/:id/fields/:field_id', function(){
-    echo json_encode(["Route matches" => "PUT /subscribers/:id/fields/:field_id"]);
+$routes->put('subscribers/:id/fields/:fieldId', function($routeInfo, $data){
+    $field = Field::load($routeInfo["fieldId"]);
+    if(empty($field)) {
+        Response::render(Response::NOT_FOUND, 404);
+    }
+    else if ($field->save($data)) {
+        Response::render($field, 200);
+    } else {
+        Response::render($field->getErrors(), 400);
+    }
 });
 
 // Subscriber resource removal [PUT]
-$routes->delete('subscribers/:id/fields/:field_id', function(){
-    echo json_encode(["Route matches" => "DELETE /subscribers/:id/fields/:field_id"]);
+$routes->delete('subscribers/:id/fields/:fieldId', function($routeInfo){
+    $field = Field::load($routeInfo["fieldId"]);
+    if (empty($field)) {
+        Response::render(Response::NOT_FOUND, 404);
+    } else if ($field->delete()) {
+        Response::render(null, 204, false);
+    } else {
+        Response::render($field->getErrors(), 400);
+    }
 });
 
 // Nothing was found with given resource identifiers or no route matched
-http_response_code(404);
-exit;
+Response::render(Response::NOT_FOUND, 404);
