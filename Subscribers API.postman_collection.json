@@ -1,0 +1,586 @@
+{
+	"info": {
+		"_postman_id": "e978cae9-0d44-435e-abef-3b8231a8e112",
+		"name": "Subscribers API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "subscribers",
+			"item": [
+				{
+					"name": "index",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "052401a7-09d2-47f8-bf09-abe5d525a599",
+								"exec": [
+									"var subscribers = pm.response.json();",
+									"",
+									"if (subscribers !== undefined && subscribers.length > 0) {",
+									"    var subscriber = subscribers[0];",
+									"    pm.environment.set(\"subscriberId\", subscriber.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"fullName\": \"John Wayne\",\n\t\"email\": \"john120@example.com\",\n\t\"status\": \"active\"\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/subscribers",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"subscribers"
+							]
+						},
+						"description": "List all subscriber resources"
+					},
+					"response": []
+				},
+				{
+					"name": "show",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8b8bae73-75a9-42f1-8ab3-7aeea9e049d9",
+								"exec": [
+									"var subscriber = pm.response.json();",
+									"",
+									"if(subscriber !== undefined) {",
+									"    pm.environment.set(\"subscriberId\", subscriber.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/subscribers/{{subscriberId}}",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"subscribers",
+								"{{subscriberId}}"
+							]
+						},
+						"description": "Retrieves a specific subscriber"
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8b8bae73-75a9-42f1-8ab3-7aeea9e049d9",
+								"exec": [
+									"var subscriber = pm.response.json();",
+									"",
+									"if(subscriber !== undefined) {",
+									"    pm.environment.set(\"subscriberId\", subscriber.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"fullName\": \"John Wayne\",\n\t\"email\": \"john.{{$timestamp}}@example.com\",\n\t\"status\": \"active\",\n\t\"campaignId\": 1\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/subscribers",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"subscribers"
+							]
+						},
+						"description": "Creates a new subscriber resource"
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8b8bae73-75a9-42f1-8ab3-7aeea9e049d9",
+								"exec": [
+									"var subscriber = pm.response.json();",
+									"",
+									"if(subscriber !== undefined) {",
+									"    pm.environment.set(\"subscriberId\", subscriber.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"fullName\": \"John Doe\",\n\t\"email\": \"john.{{$timestamp}}@dummy.com\",\n\t\"status\": \"bounced\"\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/subscribers/{{subscriberId}}",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"subscribers",
+								"{{subscriberId}}"
+							]
+						},
+						"description": "Updates a subscriber resource"
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8b8bae73-75a9-42f1-8ab3-7aeea9e049d9",
+								"exec": [
+									"pm.environment.set(\"subscriberId\", 0);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/subscribers/{{subscriberId}}",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"subscribers",
+								"{{subscriberId}}"
+							]
+						},
+						"description": "Deletes a subscriber resource"
+					},
+					"response": []
+				}
+			],
+			"description": "Contains all CRUD operations for subscribers",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "83a810e4-6e47-4e3f-96c9-cff2dcc9f184",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "2b120eb4-c615-4a12-ae52-22d319f00e55",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "fields",
+			"item": [
+				{
+					"name": "index",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "052401a7-09d2-47f8-bf09-abe5d525a599",
+								"exec": [
+									"var fields = pm.response.json();",
+									"",
+									"if (fields !== undefined && fields.length > 0) {",
+									"    var field = fields[0];",
+									"    pm.environment.set(\"fieldId\", field.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"fullName\": \"John Wayne\",\n\t\"email\": \"john120@example.com\",\n\t\"status\": \"active\"\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/subscribers/{{subscriberId}}/fields",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"subscribers",
+								"{{subscriberId}}",
+								"fields"
+							]
+						},
+						"description": "List all subscriber resources"
+					},
+					"response": []
+				},
+				{
+					"name": "show",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "052401a7-09d2-47f8-bf09-abe5d525a599",
+								"exec": [
+									"var fields = pm.response.json();",
+									"",
+									"if (fields !== undefined && fields.length > 0) {",
+									"    var field  = fields[0];",
+									"    pm.environment.set(\"fieldId\", field.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"fullName\": \"John Wayne\",\n\t\"email\": \"john120@example.com\",\n\t\"status\": \"active\"\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/subscribers/{{subscriberId}}/fields/{{fieldId}}",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"subscribers",
+								"{{subscriberId}}",
+								"fields",
+								"{{fieldId}}"
+							]
+						},
+						"description": "Retrieves a specific field resource"
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8b8bae73-75a9-42f1-8ab3-7aeea9e049d9",
+								"exec": [
+									"var field = pm.response.json();",
+									"",
+									"if(field !== undefined) {",
+									"    pm.environment.set(\"fieldId\", field.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\": \"some_field\",\n\t\"dataType\": \"string\",\n\t\"subscriberId\": {{subscriberId}}\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/subscribers/{{subscriberId}}/fields",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"subscribers",
+								"{{subscriberId}}",
+								"fields"
+							]
+						},
+						"description": "Creates a new field resource"
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8b8bae73-75a9-42f1-8ab3-7aeea9e049d9",
+								"exec": [
+									"var field = pm.response.json();",
+									"",
+									"if(field !== undefined) {",
+									"    pm.environment.set(\"fieldId\", field.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\": \"another_title\",\n\t\"dataType\": \"boolean\"\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/subscribers/{{subscriberId}}/fields/{{fieldId}}",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"subscribers",
+								"{{subscriberId}}",
+								"fields",
+								"{{fieldId}}"
+							]
+						},
+						"description": "Updates a field resource"
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8b8bae73-75a9-42f1-8ab3-7aeea9e049d9",
+								"exec": [
+									"pm.environment.set(\"fieldId\", 0);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/subscribers/{{subscriberId}}/fields/{{fieldId}}",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"subscribers",
+								"{{subscriberId}}",
+								"fields",
+								"{{fieldId}}"
+							]
+						},
+						"description": "Deletes a field resource"
+					},
+					"response": []
+				}
+			],
+			"description": "Contains all CRUD operations for subscriber fields",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "fa280fdd-d52f-4f73-88e0-ee2457b786ef",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "4e5c9ffd-83b7-494a-9683-c651a3845447",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
