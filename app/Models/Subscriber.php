@@ -46,6 +46,8 @@ class Subscriber extends BaseModel
      */
     public function valid()
     {
+        $this->errors = [];
+
         if (empty($this->email)) {
             $this->errors["email"] = "email is required";
         }
@@ -65,6 +67,11 @@ class Subscriber extends BaseModel
             if(empty($format)) {
                 $this->errors["email"] = "email address format is invalid";
             }
+        }
+
+        // validate email domain
+        if ($this->validEmailDomain() == false) {
+            $this->errors["email"] = "email domain seems to be unavailable";
         }
 
         if (in_array($this->status, self::STATUSES) !== true) {
@@ -93,5 +100,25 @@ class Subscriber extends BaseModel
     protected function getTableName()
     {
         return "subscribers";
+    }
+
+    /**
+     * Validates the availability domain of the subscriber email
+     */
+    private function validEmailDomain()
+    {
+        $domain = explode("@", $this->email);
+        if (count($domain) === 2) {
+            $curl = curl_init($domain[1]);
+            curl_setopt($curl, CURLOPT_CONNECT_ONLY, true);
+            curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 5);
+            curl_setopt($curl, CURLOPT_TIMEOUT, 5);
+            $result = curl_exec($curl);
+            curl_close($curl);
+
+            return $result == 1;
+        }
+
+        return true;
     }
 }

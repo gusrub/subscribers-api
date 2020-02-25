@@ -22,7 +22,7 @@ class SubscriberValidationsTest extends BaseTestCase
         $this->subscriber = new Subscriber([
             "fullName" => "Gustavo Rubio",
             "email" => "gus@ahivamos.net",
-            "state" => "active",
+            "status" => "active",
             "campaignId" => 1
         ]);
     }
@@ -86,6 +86,21 @@ class SubscriberValidationsTest extends BaseTestCase
         $this->subscriber->email = "gustavo AT invalid";
         $this->assertFalse($this->subscriber->valid());
     }
+
+    /**
+     * Test that email domain is valid
+     *
+     * @return void
+     * @test
+     */
+    public function validEmailDomain()
+    {
+        $this->subscriber->email = "gustavo@invalid";
+        $this->assertFalse($this->subscriber->valid());
+
+        $this->subscriber->email = "gustavo@example.com";
+        $this->assertTrue($this->subscriber->valid());      
+    }    
 
     /**
      * Test that status is an accepted value

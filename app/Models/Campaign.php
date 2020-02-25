@@ -20,6 +20,8 @@ class Campaign extends BaseModel
      */
     public function valid()
     {
+        $this->errors = [];
+
         if (empty($this->title)) {
             $this->errors["title"] = "title is required";
         }
