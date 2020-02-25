@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export SUBSCRIBERS_API_ENV="test"
+export SUBSCRIBERS_API_ENV=test
 export BIND_ADDRESS="0.0.0.0"
 export BIND_PORT="7000"
 export ROOT_FOLDER="public/"

@@ -24,7 +24,8 @@ class BaseTestCase extends TestCase
     public function setUp()
     {
         # load dotenv
-        $dotenv = \Dotenv\Dotenv::createImmutable(__DIR__ . "/../", ".env.test");
+        $env = getenv('SUBSCRIBERS_API_ENV');
+        $dotenv = \Dotenv\Dotenv::createMutable(__DIR__ . "/../", ".env.$env");
         $dotenv->load();
 
         $host = getenv('BIND_ADDRESS');

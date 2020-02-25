@@ -5,7 +5,8 @@ namespace SubscribersApi;
 require __DIR__ . '/../vendor/autoload.php';
 
 # load dotenv
-$dotenv = \Dotenv\Dotenv::createImmutable(__DIR__ . "/../");
+$env = getenv('SUBSCRIBERS_API_ENV');
+$dotenv = \Dotenv\Dotenv::createMutable(__DIR__ . "/../", ".env.$env");
 $dotenv->load();
 
 use SubscribersApi\Models\Subscriber;

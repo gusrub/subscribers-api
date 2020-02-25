@@ -1,10 +1,9 @@
 #!/bin/bash
 
-export MAILERLITE_ENV=development
-
-BIND_PORT=7000
-BIND_ADDRESS="0.0.0.0"
-ROOT_FOLDER="public"
+export SUBSCRIBERS_API_ENV=development
+export BIND_PORT=7000
+export BIND_ADDRESS="0.0.0.0"
+export ROOT_FOLDER="public"
 
 while getopts ":a:p:f:" opt; do
     case "${opt}" in
