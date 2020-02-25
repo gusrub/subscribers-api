@@ -17,10 +17,10 @@ then
 	printf "Server started (PID $SERVER_PID)\n\n"
 	if [[ $ARGS == "" ]]; then
 		echo "No arguments given... running full suite"
-		vendor/bin/phpunit --colors=auto --verbose tests/
+		vendor/bin/phpunit --colors=auto --testdox --verbose tests/
 	else
 		echo "Running specific tests..."
-		vendor/bin/phpunit --colors=auto --verbose $ARGS
+		vendor/bin/phpunit --colors=auto --testdox --verbose $ARGS
 	fi
 
 	printf "\nStopping server (PID $SERVER_PID)\n"
